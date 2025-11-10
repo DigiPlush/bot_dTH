@@ -1,11 +1,13 @@
 import threading
+import traceback
+import logging
 from scripts import GUI
 from scripts import imageprocessing
 from scripts import actions
 
 
 class Manager():
-    def __init__(self, controller):
+    def __init__(self):
         self.stop = False
         self.state = 1
         self.sleepTime = 0.1
@@ -35,10 +37,13 @@ class Manager():
 
 
     def Hunt(self):
+        print("starting loop")
         while True and not self.stop :
-            if self.State == 1 :
+            if self.state == 1 :
+                
                 try :
                     indice=imageprocessing.findIndice()
+                    print (indice)
                     if(indice.split(' ')[0] == 'Phorreur'):
                         #TODO hold z to check phorreur name while going forward
 
@@ -47,22 +52,54 @@ class Manager():
                         self.gui.UpdateText("Phorreur detected, take control")
                         continue
                     direction=imageprocessing.findDirection()
-                    if self.firstIndice:
-                        coords=actions.scrapCoord()
+                    print(direction)
+                    if self.firstIndice :
+                        print("coordloop")
+                        coords=imageprocessing.scrapCoord()
+                        print("coords")
                         actions.enterCoord(coords)
                         self.firstIndice=False
                     actions.clickDirection(direction)
                     actions.enterIndice(indice)
                     actions.pasteTravel()
-                    actions.clickOn(actions.pics_dict["coordCenter"])
+                    actions.clickOn("coordCenter")
                     actions.waitForArrival()
+                    
+                    stepEnded = False
+                    try:
+                        if imageprocessing.isElementOnScreen("flag"):
+                            actions.clickOn("flag")
+                        else:
+                            print("step ended1")
+                            stepEnded = True
+                    except:
+                        print("step ended2")
+                        stepEnded = True
+
+                    if stepEnded:
+                        try :
+                            actions.clickOn("validerEtape")
+                        except Exception as e:
+                            self.stop=True
+                            logging.error(traceback.format_exc())
+                        
 
 
                         
-                except:
-                    pass
+                except Exception as e:
+                    self.stop=True
+                    logging.error(traceback.format_exc())
+                    
+                    
                 
 
-    def RunLoop(self):
-        return (self.c.State == 2)
-    
+
+#---------------MAIN----------------
+
+if __name__ == "__main__":
+    print("launch")
+    m = Manager()
+    m.RunThread()
+    mainGUI = GUI.gui()
+    m.setGUI(mainGUI)
+    mainGUI.start()

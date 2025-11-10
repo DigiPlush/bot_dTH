@@ -6,9 +6,12 @@ import cv2
 import random
 import imagehash
 import json
+import win32clipboard
 import unidecode
 from PIL import ImageGrab
 from PIL import Image
+
+from scripts import imageprocessing
 
 pg.FAILSAFE = False
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -31,8 +34,8 @@ curPos = [0, 0]
 
 
 
-def clickOn(name):
-    pos = pg.locateCenterOnScreen(name, confidence=CONFIDENCE)
+def clickOn(name, confidence=CONFIDENCE):
+    pos = pg.locateCenterOnScreen(pics_dict[name], confidence=confidence)
     pg.moveTo(pos[0], pos[1], duration=MOVESPEED)
     pg.click()
 
@@ -52,19 +55,12 @@ def moveHeroDir(dir):
 
 
 def clickDirection(dir):
-    if (dir == "Up"):
-        clickOn(pics_dict["buttonUp"])
-    if (dir == "Down"):
-        clickOn(pics_dict["buttonDown"])
-    if (dir == "Right"):
-        clickOn(pics_dict["buttonRight"])
-    if (dir == "Left"):
-        clickOn(pics_dict["buttonLeft"])
+    clickOn("button"+dir)
 
 
 
 def enterIndice(indiceName):
-    clickOn(pics_dict["indiceField"])
+    clickOn("indiceField")
     pressText(indiceName)
     pg.move(0, 25)
     time.sleep(1)
@@ -78,25 +74,26 @@ def findDistance():
     return goal
 
 def pasteTravel():
-    pos = pg.locateCenterOnScreen(pics_dict["chat"], confidence=CONFIDENCE)
-    pg.moveTo(pos[0],pg.size()[1]-20)
-    pg.click()
-    time.sleep(0.2)
-    pg.hotkey('ctrl','v')
-    pg.press('enter')
-    time.sleep(1)
-    clickOn(pics_dict["travelOk"])
+    win32clipboard.OpenClipboard()
+    clipboard = win32clipboard.GetClipboardData().replace("/","").split(' ')
+    win32clipboard.CloseClipboard()
+    if(clipboard[0] == "travel"):
+        pos = pg.locateCenterOnScreen(pics_dict["chat"], confidence=CONFIDENCE)
+        pg.moveTo(pos[0],pg.size()[1]-20)
+        pg.click()
+        time.sleep(0.2)
+        pg.hotkey('ctrl','v')
+        pg.press('enter')
+        time.sleep(0.5)
+        clickOn("travelOk")
+    else :
+        raise Exception("Wrong clipboard value !")
 
 
 def waitForArrival():
     seen = False
     while not seen:
-        try:
-            pos = pg.locateCenterOnScreen(pics_dict["notif"])
-            if(pos) :
-                seen = True
-        except:
-            continue
+        seen = imageprocessing.isElementOnScreen("notif")
     print("arrivé")
 
 

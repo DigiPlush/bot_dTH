@@ -56,6 +56,16 @@ def findDirection():
 
     return res
 
+def isElementOnScreen(elt):
+    seen = False
+    try:
+        pos = pg.locateCenterOnScreen(pics_dict[elt])
+        if(pos) :
+            seen = True
+    except:
+        pass
+
+    return seen
 
 def findIndice():
     try:

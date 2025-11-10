@@ -7,9 +7,10 @@ import cv2
 import unidecode
 import time
 import numpy as np
+import win32clipboard
 
-import imageprocessing
-import actions
+from scripts import imageprocessing
+from scripts import actions
 
 
 
@@ -27,9 +28,5 @@ with open('./src/util/indicesDictionnary.json') as json_file:
     indicesDictionnary = json.load(json_file)
 
 
-#actions.pasteTravel()
-#actions.clickOn(actions.pics_dict["coordCenter"])
-actions.waitForArrival()
-
-
+actions.pasteTravel()
 
