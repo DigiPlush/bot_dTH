@@ -2,6 +2,7 @@ import threading
 import traceback
 import logging
 import time
+from pynput.keyboard import Listener as keylistener, Key
 from scripts import GUI
 from scripts import imageprocessing
 from scripts import actions
@@ -12,14 +13,14 @@ class Manager():
         self.stop = False
         self.state = 1
         self.sleepTime = 0.1
-        self.firstIndice = True
+        self.keylistener = keylistener(on_press=self.on_press)
+        self.keylistener.start()
 
     def __del__(self):
         self.stop = True
         self.mainthread.join()
 
     def Shutdown(self):
-        self.c.__del__()
         self.__del__()
         self.gui.Kill()
 
@@ -29,6 +30,11 @@ class Manager():
     def RunThread(self):
         self.mainthread = threading.Thread(target=self.Hunt)
         self.mainthread.start()
+
+    def on_press(self,key):
+        if key == Key.esc :
+            print("pressed")
+            self.Shutdown()
 
 #states: 
 #0 : tp to hunt and launch it then tp to begining (and walk to it if needed)
@@ -40,54 +46,76 @@ class Manager():
     def Hunt(self):
         print("starting loop")
         while True and not self.stop :
+            actions.focusDofusWindow()
             if self.state == 1 :
-                
-                try :
-                    indice=imageprocessing.findIndice()
-                    print (indice)
-                    if(indice.split(' ')[0] == 'Phorreur'):
-                        #TODO hold z to check phorreur name while going forward
 
-                        self.State=3
-                        print('Phorreur')
-                        self.gui.UpdateText("Phorreur detected, take control")
-                        continue
-                    direction=imageprocessing.findDirection()
-                    print(direction)
-                    if self.firstIndice :
-                        coords=imageprocessing.scrapCoord()
-                        actions.enterCoord(coords)
-                        self.firstIndice=False
-                    actions.clickDirection(direction)
-                    actions.enterIndice(indice)
-                    actions.pasteTravel()
-                    actions.clickOn("coordCenter")
-                    actions.waitForArrival()
-                    
-                    actions.clickOn("flag", confidence=0.99)
-                    time.sleep(0.5)
-                    try:
-                        if imageprocessing.isElementOnScreen("flag", confidence = 0.99):
-                            print("tjrs un flag")
-                            pass
-                        else:
-                            print("noflag")
-                            actions.clickOn("validerEtape")
-                    except:
-                        try:
-                            actions.clickOn("validerEtape")
-                        except Exception as e:
-                            self.stop=True
-                            logging.error(traceback.format_exc())
+                if not imageprocessing.isLastEtape():
 
-                    time.sleep(1)
+                    try :
+                        firstIndice= True
+                        if imageprocessing.isElementOnScreen("flagChecked"):
+                            firstIndice = False
 
-
+                        indice=imageprocessing.findIndice()
+                        print (indice)
                         
-                except Exception as e:
-                    self.stop=True
-                    logging.error(traceback.format_exc())
-                    
+                        direction=imageprocessing.findDirection()
+                        print(direction)
+
+                        if(indice.split(' ')[0] == 'Phorreur'):
+                            
+                            print('Phorreur')
+                            actions.reachPhorreur()
+
+                        else:
+
+                            if firstIndice :
+                                coords=imageprocessing.scrapCoord()
+                                actions.enterCoord(coords)
+                                firstIndice=False
+                            actions.clickDirection(direction)
+                            actions.enterIndice(indice)
+
+                            #checkpoint if we have to kill the script
+                            if self.stop : 
+                                continue
+
+                            actions.pasteTravel()
+                            actions.clickOn("coordCenter")
+                            actions.waitForArrival()
+                        
+                        if self.stop : 
+                            continue
+
+                        actions.clickOn("flag", confidence=0.99)
+                        time.sleep(0.5)
+                        try:
+                            if imageprocessing.isElementOnScreen("flag", confidence = 0.99):
+                                pass
+                            else:
+                                actions.clickOn("validerEtape")
+                        except:
+                            try:
+                                actions.clickOn("validerEtape")
+                            except Exception as e:
+                                print("stopping")
+                                self.stop=True
+                                logging.error(traceback.format_exc())
+
+                        time.sleep(1)
+
+
+                            
+                    except Exception as e:
+                        print("stopping2")
+                        self.stop=True
+                        logging.error(traceback.format_exc())
+                else :
+                    pass
+                    #actions.clickOn("combat")
+        print("end of loop")   
+        print(self.stop)      
+        self.Shutdown()   
                     
                 
 

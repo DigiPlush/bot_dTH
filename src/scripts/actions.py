@@ -39,6 +39,9 @@ def clickOn(name, confidence=CONFIDENCE):
     pg.moveTo(pos[0], pos[1], duration=MOVESPEED)
     pg.click()
 
+def focusDofusWindow():
+    pg.moveTo(0,2)
+    pg.click()
 
 def moveHeroDir(dir):
     #TODO mettre les shortcuts si utilisé
@@ -52,6 +55,17 @@ def moveHeroDir(dir):
         pg.moveTo(random.randint(1200, 1300), 1270)
     pg.click()
 
+def reachPhorreur(dir):
+    reached = False
+    
+    while not reached : 
+        
+        if imageprocessing.checkPhorreur():
+            reached = True
+        else :
+            moveHeroDir(dir)
+            time.sleep(5)
+    
 
 
 def clickDirection(dir):

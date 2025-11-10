@@ -22,6 +22,7 @@ class gui :
         self.SetTop()
     
     def SetTop(self):
+        self.fen.wm_attributes("-toolwindow", True)
         self.fen.attributes("-topmost", True)
         self.fen.attributes("-topmost", False)
 

@@ -65,7 +65,7 @@ def findDirection():
 def isElementOnScreen(elt, confidence = CONFIDENCE):
     seen = False
     try:
-        if elt == "flag":
+        if elt in ("flag", "flagChecked"):
             pos = pg.locateOnScreen(pics_dict[elt],confidence=confidence, region =(depart.left, depart.top,500, 500))
         else:
             pos = pg.locateOnScreen(pics_dict[elt],confidence=confidence)
@@ -82,10 +82,11 @@ def isLastEtape():
         cap = ImageGrab.grab(bbox=(pos.left+pos.width, pos.top, pos.left+pos.width+100, pos.top+pos.height))
         txt = getText(cap).replace('\n',"").split('/')
         res = (int(txt[1])-int(txt[0])==0)
+        return res
     except Exception as e:
         logging.error(traceback.format_exc())
     
-    return res
+    return
 
 def findIndice():
     try:
@@ -109,7 +110,20 @@ def getText(cap):
     return text
 
 def scrapCoord():
-    pos = pg.locateOnScreen(pics_dict["depart"], confidence=CONFIDENCE)
-    cap = ImageGrab.grab(bbox=(pos.left+pos.width, pos.top, pos.left+pos.width+100, pos.top+pos.height))
-    res = getText(cap).replace("[","").replace("]","").replace("\n","").split(',')[:2]
+    
+    pos = pg.locateOnScreen(pics_dict["bonusXPLogo"], confidence=CONFIDENCE)
+    cap = ImageGrab.grab(bbox=(0, pos.top, pos.left, pos.top+pos.height))
+    cap.save("./res/tmp.png")
+    res = getText(cap).split('-')[0].replace(" ","").split(',')
+
+    return res
+
+def checkPhorreur():
+    pg.keyDown('z')
+    time.sleep(1)
+    if isElementOnScreen("phorreurName"):
+        res = True
+    else :
+        res = False
+    pg.keyUp('z')
     return res
