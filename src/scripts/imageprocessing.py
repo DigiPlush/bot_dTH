@@ -16,7 +16,7 @@ import pytesseract
 
 #-----------VARS-----------------------
 
-pg.FAILSAFE = False
+
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
@@ -119,11 +119,13 @@ def scrapCoord():
     return res
 
 def checkPhorreur():
-    pg.keyDown('z')
-    time.sleep(1)
+    pos = pg.locateCenterOnScreen(pics_dict["YButton"])
+    pg.moveTo(pos[0]+30, pos[1])
+    pg.mouseDown(button='left')
+    time.sleep(5)
     if isElementOnScreen("phorreurName"):
         res = True
     else :
         res = False
-    pg.keyUp('z')
+    pg.mouseUp(button='left')
     return res

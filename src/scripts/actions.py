@@ -10,15 +10,16 @@ import win32clipboard
 import unidecode
 from PIL import ImageGrab
 from PIL import Image
+from pynput.keyboard import Key, Controller
 
 from scripts import imageprocessing
 
-pg.FAILSAFE = False
+
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 MOVESPEED = 0.3
 CONFIDENCE = 0.8
-
+keyboard=Controller()
 
 with open("./src/util/pics_dict.json") as json_file:
     pics_dict = json.load(json_file)
@@ -44,25 +45,28 @@ def focusDofusWindow():
     pg.click()
 
 def moveHeroDir(dir):
-    #TODO mettre les shortcuts si utilisé
-    if dir == 'left':
-        pg.moveTo(1, random.randint(650, 750))
-    elif dir == 'right':
-        pg.moveTo(2559, random.randint(650, 750))
-    elif dir == 'up':
-        pg.moveTo(random.randint(1200, 1300), 1)
-    elif dir == 'down':
-        pg.moveTo(random.randint(1200, 1300), 1270)
-    pg.click()
+
+    print("moving")
+
+    if dir == 'Left':
+        keyboard.press(",")
+    elif dir == 'Right':
+        keyboard.press("!")
+    elif dir == 'Up':
+        keyboard.press(";")
+    elif dir == 'Down':
+        keyboard.press(":")
+    
 
 def reachPhorreur(dir):
     reached = False
     
     while not reached : 
-        
+        print("try")
         if imageprocessing.checkPhorreur():
             reached = True
         else :
+            time.sleep(1)
             moveHeroDir(dir)
             time.sleep(5)
     

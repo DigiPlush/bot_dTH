@@ -45,6 +45,7 @@ class Manager():
 
     def Hunt(self):
         print("starting loop")
+        firstIndice=True
         while True and not self.stop :
             actions.focusDofusWindow()
             if self.state == 1 :
@@ -52,10 +53,7 @@ class Manager():
                 if not imageprocessing.isLastEtape():
 
                     try :
-                        firstIndice= True
-                        if imageprocessing.isElementOnScreen("flagChecked"):
-                            firstIndice = False
-
+                        
                         indice=imageprocessing.findIndice()
                         print (indice)
                         
@@ -65,7 +63,8 @@ class Manager():
                         if(indice.split(' ')[0] == 'Phorreur'):
                             
                             print('Phorreur')
-                            actions.reachPhorreur()
+                            actions.reachPhorreur(direction)
+                            firstIndice=True
 
                         else:
 

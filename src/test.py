@@ -9,12 +9,14 @@ import time
 import numpy as np
 import win32clipboard
 
+
+from pynput.keyboard import Key, Controller
 from scripts import imageprocessing
 from scripts import actions
 
 
+keyboard=Controller()
 
-pg.FAILSAFE = False
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 CONFIDENCE = 0.8
@@ -27,5 +29,9 @@ with open('./src/util/indicesDictionnary.json') as json_file:
     
     indicesDictionnary = json.load(json_file)
 
+pg.click()
+time.sleep(1)
 
-print(imageprocessing.scrapCoord())
+
+
+time.sleep(3)
