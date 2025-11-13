@@ -29,9 +29,6 @@ with open('./src/util/indicesDictionnary.json') as json_file:
     
     indicesDictionnary = json.load(json_file)
 
-pg.click()
-time.sleep(1)
 
-
-
-time.sleep(3)
+pos = pg.locateCenterOnScreen(pics_dict["objets"])
+pg.moveTo(pos[0], pos[1]-20)

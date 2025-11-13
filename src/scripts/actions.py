@@ -49,13 +49,18 @@ def moveHeroDir(dir):
     print("moving")
 
     if dir == 'Left':
-        keyboard.press(",")
+        pg.moveTo(0, 50, duration=MOVESPEED)
+        pg.click()
     elif dir == 'Right':
-        keyboard.press("!")
+        pg.moveTo(pg.size()[0], 50, duration=MOVESPEED)
+        pg.click()
     elif dir == 'Up':
-        keyboard.press(";")
+        pg.moveTo(pg.size()[0]/2, 0, duration=MOVESPEED)
+        pg.click()
     elif dir == 'Down':
-        keyboard.press(":")
+        pos = pg.locateCenterOnScreen(pics_dict["objets"])
+        pg.moveTo(pos[0], pos[1]-20, duration=MOVESPEED)
+        pg.click()
     
 
 def reachPhorreur(dir):

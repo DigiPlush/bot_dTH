@@ -94,7 +94,7 @@ def findIndice():
         y1 = pos[1]
         y2 = pos[1]+pos[3]
         cap = ImageGrab.grab(bbox=(indiceX1, y1, indiceX2, y2))
-        res = unidecode.unidecode(str(getText(cap)))
+        res = unidecode.unidecode(str(getText(cap))).replace("4","a")
         
 
         if res in indicesDictionnary:

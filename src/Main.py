@@ -46,8 +46,9 @@ class Manager():
     def Hunt(self):
         print("starting loop")
         firstIndice=True
+        actions.focusDofusWindow()
         while True and not self.stop :
-            actions.focusDofusWindow()
+            
             if self.state == 1 :
 
                 if not imageprocessing.isLastEtape():
@@ -110,6 +111,7 @@ class Manager():
                         self.stop=True
                         logging.error(traceback.format_exc())
                 else :
+                    print("combat")
                     pass
                     #actions.clickOn("combat")
         print("end of loop")   
