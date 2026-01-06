@@ -35,12 +35,12 @@ curPos = [0, 0]
 
 
 
-def clickOn(name, confidence=CONFIDENCE):
+def clickOn(name, confidence=CONFIDENCE, offsetX=0, offsetY=0):
     pos = pg.locateCenterOnScreen(pics_dict[name], confidence=confidence)
-    pg.moveTo(pos[0], pos[1], duration=MOVESPEED)
+    pg.moveTo(pos[0]+offsetX, pos[1]+offsetY, duration=MOVESPEED)
     pg.click()
 
-def focusDofusWindow():
+def focusDWindow():
     pg.moveTo(0,2)
     pg.click()
 
@@ -95,6 +95,16 @@ def findDistance():
     cap = ImageGrab.grab(bbox=(1287, 646, 1346, 690))
     goal = getText(cap)
     return goal
+
+def travelTo(x,y):
+    pos = pg.locateCenterOnScreen(pics_dict["chat"], confidence=CONFIDENCE)
+    pg.moveTo(pos[0],pg.size()[1]-20)
+    pg.click()
+    time.sleep(0.2)
+    pressText("/travel "+str(x)+" "+str(y))
+    pg.press('enter')
+    time.sleep(0.5)
+    clickOn("travelOk")
 
 def pasteTravel():
     win32clipboard.OpenClipboard()
@@ -154,7 +164,7 @@ def waitUntil(somepredicate, timeout, period=0.1, *args, **kwargs):
         time.sleep(period)
     return False
 
-def wait(secs,grainMax, grainMin=0):
+def wait(secs,grainMax=0, grainMin=0):
     time.sleep(secs+random.randint(grainMin,grainMax))
 
 
@@ -164,6 +174,20 @@ def comparePos(pos1, pos2):
             return False
     return True
 
+def havreSac():
+    keyboard.tap("h")
+    wait(2,0)
+    if not imageprocessing.isElementOnScreen("hsPortal"):
+        clickOn("hsLogo")
+        wait(2,0)
+
+def enterRoomMission():
+    clickOn("portalMission", confidence =0.5)
+    wait(3,0)
+    if not imageprocessing.isElementOnScreen("mission"):
+        clickOn("portalMission2a")
+        wait(3,0.5)
+        clickOn("portalMission2b")
 
 
 def takeCombatTurn():

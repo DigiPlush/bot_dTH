@@ -47,7 +47,7 @@ class Manager():
     def Hunt(self):
         print("starting loop")
         firstIndice=True
-        actions.focusDofusWindow()
+        actions.focusDWindow()
         if imageprocessing.isElementOnScreen("sorts"):
             print("state")
             print(self.state)
@@ -62,6 +62,31 @@ class Manager():
             
             if self.state == 0 :
                 actions.havreSac()
+                actions.clickOn("hsPortal")
+                actions.wait(1)
+                actions.pressText("champs de cania\n")
+                actions.wait(3,1)
+                actions.travelTo(-25,-36)
+                actions.clickOn("coordCenter")
+                actions.waitForArrival()
+                actions.clickOn("huntDoor")
+                actions.wait(10)
+                actions.enterRoomMission()
+                actions.wait(5)
+                actions.clickOn("mission")
+                actions.wait(1)
+                actions.clickOn("distribMission",offsetY=20)
+                actions.wait(3)
+                coords=imageprocessing.scrapDepartCoord()
+                actions.travelTo(coords[0],coords[1])
+                actions.clickOn("coordCenter")
+                actions.waitForArrival()
+                self.state=1
+                continue
+
+                
+
+
             elif self.state == 1 :
 
                 if not imageprocessing.isLastEtape():

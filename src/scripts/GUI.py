@@ -3,7 +3,7 @@ from tkinter import *
 class gui :
     def __init__(self):
         self.fen = Tk()
-        self.fen.title("Treasure Hunt Autofarm")
+        self.fen.title("TH Autofarm")
         self.fen.geometry("300x50")
         self.mt = StringVar()
         self.mt.set("Farming...")

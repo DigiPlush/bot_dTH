@@ -114,6 +114,12 @@ def scrapCoord():
 
     return res
 
+def scrapDepartCoord():
+    pos = pg.locateOnScreen(pics_dict["depart"], confidence=CONFIDENCE)
+    cap = ImageGrab.grab(bbox=(pos.left+pos.width, pos.top, pos.left+pos.width+100, pos.top+pos.height))
+    res = getText(cap).replace("[","").replace("]","").replace("\n","").split(',')[:2]
+    return res
+
 def checkPhorreur():
     pos = pg.locateCenterOnScreen(pics_dict["YButton"])
     pg.moveTo(pos[0]+30, pos[1])

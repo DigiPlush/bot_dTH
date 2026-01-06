@@ -30,4 +30,6 @@ with open('./src/util/indicesDictionnary.json') as json_file:
     indicesDictionnary = json.load(json_file)
 
 
-print(imageprocessing.scrapCoord())
+
+coords=imageprocessing.scrapDepartCoord()
+actions.travelTo(coords[0],coords[1])
