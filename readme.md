@@ -4,14 +4,18 @@
 
 TH auto farm bot using computer vision and automated computer actions in python. 
 
->[!CAUTION]
->Please note that this project is still a WIP and therefore might not work on every configuratiuon
+
 
 
 >[!IMPORTANT]
->Project built for educational purpose only and not to generate a single k$.
+>Important announcement for any Ankama employee stumbling on this repo:
+>This project built is for educational purpose only. I did not generated any kamas neither shared the code, I love the game and wish not to deregulate its economy.
 >Going public since last update made TH farming obsolete, I don't mind farmers accessing the code anymore
+>
+>Anyway, I'm looking for a job so read this as a motivation letter :p
 
+>[!CAUTION]
+>Please note that this project is still a WIP and therefore might not work on every configuratiuon
 This project uses Ganymede to fetch destinations so it is required to install and launch Ganymede first
 
 ## Requirements
