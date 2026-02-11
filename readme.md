@@ -2,7 +2,7 @@
 
 ## Overview
 
-TH auto farm bot using computer vision and automated computer actions in python. 
+TH auto farm bot using OCR and automated computer actions in python. 
 
 
 
@@ -19,7 +19,7 @@ TH auto farm bot using computer vision and automated computer actions in python.
 
 >[!CAUTION]
 >Please note that this project is still a WIP and therefore might not work on every configuration
-This project uses Ganymede to fetch destinations so it is required to install and launch Ganymede first
+>This project uses Ganymede to fetch destinations so it is required to install and launch Ganymede first
 
 ## Requirements
 - Python 3.8+
